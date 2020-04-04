@@ -2,14 +2,37 @@
 
 from flectra import models, fields, api
 
-# class employee_car_request(models.Model):
-#     _name = 'employee_car_request.employee_car_request'
+class CarRequest(models.Model):
+    _name = "car.request" #table in DB => car_request
+    _description = "Car Request"
 
-#     name = fields.Char()
-#     value = fields.Integer()
-#     value2 = fields.Float(compute="_value_pc", store=True)
-#     description = fields.Text()
-#
-#     @api.depends('value')
-#     def _value_pc(self):
-#         self.value2 = float(self.value) / 100
+    name = fields.Char(string="Request", required=True ,)
+
+    #car request start date
+    date_from  = fields.Datetime(
+        string='Starting Date',
+        default=fields.Datetime.now,
+    )
+    
+    #car request end date
+    date_to = fields.Datetime(
+        string='End Date',
+        required=False
+    )
+
+    #retrieve the employee that wants to request a car
+    employee_id = fields.Many2one(
+        string='Employee',
+        comodel_name='hr.employee', # this can be found out through the employee list http url as well
+        required=True,
+    )
+    
+    #retrieve the requested car model
+    field_name_id = fields.Many2one(
+        string='car',
+        comodel_name='fleet.vehicle', 
+        required=True,
+    )
+    
+    
+    
